@@ -7,7 +7,7 @@
  ## Prerequisites
  * Some POSIX compatible shell (on Windows: WSL1/2)
  * [tracespace-cli](https://github.com/tracespace/tracespace/tree/main/packages/cli) - install notes are in the link. tl;dr: `npm install -g @tracespace/cli`
- * [Inkscape](https://inkscape.org/de/) - install through your disto's package manager, or any other way you want (note: if you are using the WSL, you must install inkscape in the WSL, not on the Windows host!)
+ * [Inkscape](https://inkscape.org/de/) - install through your distro's package manager, or any other way you want (note: if you are using the WSL, you must install inkscape in the WSL, not on the Windows host!)
  * Download pcbrender.sh and put it in a folder that's part of your $PATH variable - `~/.local/bin/pcbrender.sh` in my case.
 
  ## How to use
