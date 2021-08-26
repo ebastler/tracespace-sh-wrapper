@@ -1,6 +1,6 @@
  # tracespace-cli-wrapper
 
- This is a simple shell script intended to automate use of the ([tracespace-cli](https://github.com/tracespace/tracespace/tree/main/packages/cli) project. It allows to select soldermask and silkscreen colors in a simple user input prompt, then calls the tracespace package. Afterwards it uses inkscape to covert the .svg files created by tracespace to slightly more accessible .png images (dpi can be set in a prompt as well).
+ This is a simple shell script intended to automate use of the [tracespace-cli](https://github.com/tracespace/tracespace/tree/main/packages/cli) project. It allows to select soldermask and silkscreen colors in a simple user input prompt, then calls the tracespace package. Afterwards it uses inkscape to covert the .svg files created by tracespace to slightly more accessible .png images (dpi can be set in a prompt as well).
 
  Please note: This script is in no way affiliated with the original tracespace project - it was merely written to make using their (awesome) tool a bit easier.
 
@@ -14,6 +14,11 @@
  * Navigate to a folder that contains gerber files
  * run the script (if you added the $PATH correctly, it will work with `pcbrender.sh`)
  * Follow the on-screen-prompts. All choices can be skipped by simply pressing the `enter` key, which will then use the default values (black soldermask, white silkscreen, 300 dpi)
+
+ For easier use, the script accepts optional parameters passed to it via flags. If a valid value is passed via flag, the prompt for it is skipped. If an invalid value or no value is passed, it will prompt as usual.
+ * -d: specify the DPI used for the png export. Example: `pcbrender.sh -d 420`
+ * -m: specify the soldermask RGB color. Example: `pcbrender.sh -m 0,75,128`
+ * -s: specify the silkscreen RGB color. Example: `pcbrender.sh -s 128,75,0`
 
  ## Screenshot
 A screenshot can be found here: [Sample screenshot](img/pcbrender_customcolor.png)
