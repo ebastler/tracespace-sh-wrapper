@@ -64,7 +64,7 @@ OptionChoice()
 
 # Check if flags were passed to the script at launch, assign values.
 # Set the "choice" variables to the value for "custom color" if given
-while getopts m:s:d: flag
+while getopts m:s:d:v flag
 do
     case "${flag}" in
         m) colorRGBSM=${OPTARG}
@@ -72,6 +72,7 @@ do
         s) colorRGBSS=${OPTARG}
            colorChoiceSS=$((${#colorListSS[@]}-1));;
         d) pngDPI=${OPTARG};;
+        v) pngDPI=svg;;
     esac
 done
 
@@ -110,24 +111,31 @@ then
     colorRGBSS=${colorListRGBSS[$colorChoiceSS]}
 fi
 
-# Only ask for spi if no valid value was specified via flags, re-ask until a valid value is given
-until (( $pngDPI > 0 && $pngDPI <= 10000))
+# Only ask for dpi if no valid value was specified via flags, re-ask until a valid value is given
+until (( $pngDPI > 0 && $pngDPI <= 10000 ))
 do
-    # Ask for DPI
-    read -p "Choose the target DPI of the png. Default is 300, for small PCBs you should choose a higher value: " pngDPI
+    # Ask for DPI, unless the variable is set to "svg" in which case the loop is broken
+    if [[ $pngDPI = svg ]]
+    then
+        break
+    fi
+    read -p "Choose the target DPI of the png. Default is 300, for small PCBs you should choose a higher value. 'svg' disables the conversion to png. " pngDPI
     # Default to 300 if not set
     pngDPI="${pngDPI:=300}"
 done
 
-printf '\nRendering images with soldermask color %s (R,G,B: %s, Alpha: %s) and silkscreen color %s (R,G,B: %s) in %s dpi\n' ${colorListSM[$colorChoiceSM]} $colorRGBSM $colorAlphaSM ${colorListSS[$colorChoiceSS]} $colorRGBSS $pngDPI
+printf '\nRendering images with soldermask color %s (R,G,B: %s, Alpha: %s) and silkscreen color %s (R,G,B: %s). DPI: %s \n' ${colorListSM[$colorChoiceSM]} $colorRGBSM $colorAlphaSM ${colorListSS[$colorChoiceSS]} $colorRGBSS $pngDPI
 
 rm *.png
 # Call tracespace cli with color and alpha from variables
 # The -L parameter specifies that only the complete PCB should be rendered
 tracespace -L --quiet -b.color.sm="rgba($colorRGBSM,$colorAlphaSM)" -b.color.ss="rgb($colorRGBSS)" *
-# Use find to get a list of all .svg, pass them as parameters to a subshell which calls inkscape
+# Unless the user chose to save as avg, use find to get a list of all .svg, pass them as parameters to a subshell which calls inkscape
 # The DPI are passed as the first parameter, filenames as second
-find -name "*.svg" -exec sh -c 'tempVar=$1; inkscape $2 --export-dpi=$tempVar --export-png=${2%.svg}.png' _ $pngDPI {} \; 
-rm *.svg
+if [[ $pngDPI != svg ]]
+then
+    find -name "*.svg" -exec sh -c 'tempVar=$1; inkscape $2 --export-dpi=$tempVar --export-filename=${2%.svg}.png' _ $pngDPI {} 1>/dev/null \; 
+    rm *.svg
+fi
 
 exit 0

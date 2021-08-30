@@ -16,9 +16,10 @@
  * Follow the on-screen-prompts. All choices can be skipped by simply pressing the `enter` key, which will then use the default values (black soldermask, white silkscreen, 300 dpi)
 
  For easier use, the script accepts optional parameters passed to it via flags. If a valid value is passed via flag, the prompt for it is skipped. If an invalid value or no value is passed, it will prompt as usual.
- * -d: specify the DPI used for the png export. Example: `pcbrender.sh -d 420`
- * -m: specify the soldermask RGB color. Example: `pcbrender.sh -m 0,75,128`
- * -s: specify the silkscreen RGB color. Example: `pcbrender.sh -s 128,75,0`
+ * `-d`: specify the DPI used for the png export. Example: `pcbrender.sh -d 420`
+ * `-m`: specify the soldermask RGB color. Example: `pcbrender.sh -m 0,75,128`
+ * `-s`: specify the silkscreen RGB color. Example: `pcbrender.sh -s 128,75,0`
+ * `-v`: do not convert the svg files to PNG and do not delete the svg files either.
 
  ## Screenshot
 A screenshot can be found here: [Sample screenshot](img/pcbrender_customcolor.png)
