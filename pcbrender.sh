@@ -127,9 +127,14 @@ done
 printf '\nRendering images with soldermask color %s (R,G,B: %s, Alpha: %s) and silkscreen color %s (R,G,B: %s). DPI: %s \n' ${colorListSM[$colorChoiceSM]} $colorRGBSM $colorAlphaSM ${colorListSS[$colorChoiceSS]} $colorRGBSS $pngDPI
 
 rm *.png
+# Search for a file containing "Edge" and save it's name
+outlineFilename=$(find . -maxdepth 1 -name "*Edge*" -printf '%f\n')
 # Call tracespace cli with color and alpha from variables
 # The -L parameter specifies that only the complete PCB should be rendered
-tracespace -L --quiet -b.color.sm="rgba($colorRGBSM,$colorAlphaSM)" -b.color.ss="rgb($colorRGBSS)" *
+# -g.optimizePaths=true will optimize file paths, not needed but adds little to compute time
+# -l.${outlineFilename}.options.plotAsOutline=0.05 allows the tool to fix gaps up to 0.05mm in the edge cuts to avoid artifacts
+tracespace -L -b.color.sm="rgba($colorRGBSM,$colorAlphaSM)" -b.color.ss="rgb($colorRGBSS)" -g.optimizePaths=true -l.${outlineFilename}.options.plotAsOutline=0.05 *
+
 # Unless the user chose to save as avg, use find to get a list of all .svg, pass them as parameters to a subshell which calls inkscape
 # The DPI are passed as the first parameter, filenames as second
 if [[ $pngDPI != svg ]]
